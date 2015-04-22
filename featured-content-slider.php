@@ -10,9 +10,9 @@ $slider_posts = dynamicnews_get_featured_content();
 // Check if there is Featured Content
 if ( empty( $slider_posts ) ) : ?>
 
-	<p class="frontpage-slider-empty-posts">
+	<!--<p class="frontpage-slider-empty-posts">
 		<?php _e('There is no featured content to be displayed in the slider. To set up the slider, go to Appearance → Customize, and add a tag under Tag Name in the Featured Content section. The slideshow will then display all posts which are tagged with that keyword.', 'dynamicnewslite'); ?>
-	</p>
+	</p>-->
 	
 <?php
 	return;
@@ -33,12 +33,13 @@ add_filter('excerpt_length', 'dynamicnews_slideshow_excerpt_length');
 
 			<?php // Display Post Thumbnail or default thumbnail
 				if( '' != get_the_post_thumbnail() ) :
+			?>
+					<a href="<?php esc_url(the_permalink()) ?>" rel="bookmark">
+					<?php the_post_thumbnail('slider_image', array('class' => 'slide-image')); ?>
+					</a>
+				<?php else: ?>
 
-					the_post_thumbnail('slider_image', array('class' => 'slide-image'));
-
-				else: ?>
-
-					<img src="<?php echo get_template_directory_uri(); ?>/images/default-slider-image.png" class="slide-image default-slide-image wp-post-image" alt="default-image" />
+					<!--<img src="<?php echo get_template_directory_uri(); ?>/images/default-slider-image.png" class="slide-image default-slide-image wp-post-image" alt="default-image" />-->
 
 			<?php endif;?>
 
