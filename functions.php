@@ -57,7 +57,7 @@ function dynamicnews_enqueue_html5shiv(){
     
 	/* Embeds HTML5shiv to support HTML5 elements in older IE versions plus CSS Backgrounds */ ?>
 	<!--[if lt IE 9]>
-	<script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
+	<script src="<?php echo get_template_directory_uri(); ?>/js/html5shiv.min.js" type="text/javascript"></script>
 	<![endif]-->
 	
 <?php
@@ -70,39 +70,28 @@ function dynamicnews_enqueue_html5shiv(){
 */
 function dynamicnews_fonts_url() {
     $fonts_url = '';
+
+	// Get Theme Options from Database
+	$theme_options = dynamicnews_theme_options();
 	
-    /* Translators: If there are characters in your language that are not
-    * supported by Droid Sans, translate this to 'off'. Do not translate
-    * into your own language.
-    */
-    $droid_sans = _x( 'on', 'Droid Sans font: on or off', 'dynamicnewslite' );
- 
-    /* Translators: If there are characters in your language that are not
-    * supported by Francois One, translate this to 'off'. Do not translate
-    * into your own language.
-    */
-    $francois_one = _x( 'on', 'Francois One font: on or off', 'dynamicnewslite' );
- 
-    if ( 'off' !== $droid_sans || 'off' !== $francois_one ) {
-        $font_families = array();
- 
-        if ( 'off' !== $droid_sans ) {
-            $font_families[] = 'Droid Sans:400,700';
-        }
- 
-        if ( 'off' !== $francois_one ) {
-            $font_families[] = 'Francois One';
-        }
- 
-        $query_args = array(
-            'family' => urlencode( implode( '|', $font_families ) ),
-            'subset' => urlencode( 'latin,latin-ext' ),
-        );
- 
-        $fonts_url = add_query_arg( $query_args, '//fonts.googleapis.com/css' );
-    }
- 
-    return $fonts_url;
+	// Only embed Google Fonts if not deactivated
+	if ( ! ( isset($theme_options['deactivate_google_fonts']) and $theme_options['deactivate_google_fonts'] == true ) ) :
+		
+		// Set Default Fonts
+		$font_families = array('Droid Sans:400,700', 'Francois One');
+		 
+		// Set Google Font Query Args
+		$query_args = array(
+			'family' => urlencode( implode( '|', $font_families ) ),
+			'subset' => urlencode( 'latin,latin-ext' ),
+		);
+		
+		// Create Fonts URL
+		$fonts_url = add_query_arg( $query_args, '//fonts.googleapis.com/css' );
+		
+	endif;
+	
+	return apply_filters( 'dynamicnews_google_fonts_url', $fonts_url );
 }
 
 
@@ -123,6 +112,7 @@ function dynamicnews_setup() {
 	// Add Theme Support
 	add_theme_support('post-thumbnails');
 	add_theme_support('automatic-feed-links');
+	add_theme_support('title-tag');
 	add_editor_style();
 	
 	// Add Custom Background
@@ -135,12 +125,8 @@ function dynamicnews_setup() {
 		'height' => 200,
 		'flex-height' => true));
 		
-	// Add theme support for Jetpack Featured Content
-	add_theme_support( 'featured-content', array(
-		'featured_content_filter' => 'dynamicnews_get_featured_content',
-		'max_posts'  => 20
-		)
-	);
+	// Add Theme Support for Dynamic News Pro Plugin
+	add_theme_support( 'dynamicnews-pro' );
 
 	// Register Navigation Menus
 	register_nav_menu( 'primary', __('Main Navigation', 'dynamicnewslite') );
@@ -209,31 +195,18 @@ function dynamicnews_register_sidebars() {
 endif;
 
 
-/*==================================== THEME FUNCTIONS ====================================*/
+// Add title tag for older WordPress versions
+if ( ! function_exists( '_wp_render_title_tag' ) ) :
 
-// Creates a better title element text for output in the head section
-add_filter( 'wp_title', 'dynamicnews_wp_title', 10, 2 );
+	add_action( 'wp_head', 'dynamicnews_wp_title' );
+	function dynamicnews_wp_title() { ?>
+		
+		<title><?php wp_title( '|', true, 'right' ); ?></title>
 
-function dynamicnews_wp_title( $title, $sep = '' ) {
-	global $paged, $page;
-
-	if ( is_feed() )
-		return $title;
-
-	// Add the site name.
-	$title .= get_bloginfo( 'name' );
-
-	// Add the site description for the home/front page.
-	$site_description = get_bloginfo( 'description', 'display' );
-	if ( $site_description && ( is_home() || is_front_page() ) )
-		$title = "$title $sep $site_description";
-
-	// Add a page number if necessary.
-	if ( $paged >= 2 || $page >= 2 )
-		$title = "$title $sep " . sprintf( __( 'Page %s', 'dynamicnewslite' ), max( $paged, $page ) );
-
-	return $title;
-}
+<?php
+    }
+    
+endif;
 
 
 // Add Default Menu Fallback Function
@@ -245,16 +218,6 @@ function dynamicnews_default_menu() {
 // Get Featured Posts
 function dynamicnews_get_featured_content() {
 	return apply_filters( 'dynamicnews_get_featured_content', false );
-}
-
-
-// Display Credit Link Function
-function dynamicnews_credit_link() {
-	
-	printf(__( 'Powered by %1$s and %2$s.', 'dynamicnewslite' ), 
-			sprintf( '<a href="http://wordpress.org" title="WordPress">%s</a>', __( 'WordPress', 'dynamicnewslite' ) ),
-			sprintf( '<a href="http://themezee.com/themes/dynamicnews/" title="Dynamic News WordPress Theme">%s</a>', __( 'Dynamic News', 'dynamicnewslite' ) )
-		);
 }
 
 
@@ -368,10 +331,10 @@ require( get_template_directory() . '/inc/template-tags.php' );
 require( get_template_directory() . '/inc/widgets/widget-category-posts-boxed.php' );
 require( get_template_directory() . '/inc/widgets/widget-category-posts-columns.php' );
 require( get_template_directory() . '/inc/widgets/widget-category-posts-grid.php' );
+require( get_template_directory() . '/inc/widgets/widget-category-posts-single.php' );
 
-// Include Featured Content class in case it does not exist yet (e.g. user has not Jetpack installed)
-if ( ! class_exists( 'Featured_Content' ) && 'plugins.php' !== $GLOBALS['pagenow'] ) {
-	require( get_template_directory() . '/inc/featured-content.php' );
-}
+// Include Featured Content class
+require( get_template_directory() . '/inc/featured-content.php' );
+
 
 ?>
