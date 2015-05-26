@@ -6,15 +6,15 @@
 
 			<div class="type-page">
 			
-				<h2 class="page-title"><?php _e('Fehler 404: Seite nicht gefunden', 'dynamicnewslite'); ?></h2>
+				<h2 class="page-title"><?php _e('404 Error: Not found', 'dynamicnewslite'); ?></h2>
 				
 				<div class="entry">
-					<p><?php _e('Die aufgerufene Seite existiert nicht oder wurde verschoben. Bitte benutze das Menü oder die Suchfunktion um das zu finden nachdem du suchst.', 'dynamicnewslite'); ?></p>
+					<p><?php _e('The page you trying to reach does not exist, or has been moved. Please use the menus or the search box to find what you are looking for', 'dynamicnewslite'); ?></p>
 					
-					<h2><?php _e('Suche', 'dynamicnewslite'); ?></h2>
+					<h2><?php _e('Search', 'dynamicnewslite'); ?></h2>
 					<?php get_search_form(); ?>
 
-					<h2><?php _e('Letzte Beiträge', 'dynamicnewslite'); ?></h2>
+					<h2><?php _e('Recent Posts', 'dynamicnewslite'); ?></h2>
 					<ul>
 						<?php
 							$recent_posts = wp_get_recent_posts(array('numberposts' => '8', 'post_status' => 'publish'));
@@ -24,7 +24,7 @@
 						?>
 					</ul>
 					
-					<h2><?php _e('Seiten', 'dynamicnewslite'); ?></h2>
+					<h2><?php _e('Pages', 'dynamicnewslite'); ?></h2>
 					<ul>
 						<?php wp_list_pages('title_li='); ?>
 					</ul>
