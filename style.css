@@ -1831,7 +1831,7 @@ a, a:link, a:visited,
 	display: inline-block;
 	padding: 3px 4px;
 	vertical-align: top;
-	width: 233px;
+	width: calc(100% - 79px);
 }
 #em_widget-2 ul .title-location-box h4 {
 	font-weight: bold;
