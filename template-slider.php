@@ -9,6 +9,8 @@ Template Name: Post Slider
 		
 		<section id="content" class="primary" role="main">
 		
+		<?php if ( function_exists( 'themezee_breadcrumbs' ) ) themezee_breadcrumbs(); ?>
+			
 		<?php // Display Featured Post Slideshow
 		get_template_part( 'featured-content-slider' );
 		?>
@@ -29,4 +31,4 @@ Template Name: Post Slider
 		
 	</div>
 	
-<?php get_footer(); ?>	
+<?php get_footer(); ?>
