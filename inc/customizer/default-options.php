@@ -30,10 +30,13 @@ function dynamicnews_theme_options() {
 function dynamicnews_default_options() {
 
 	$default_options = array(
+		'header_tagline'					=> false,
+		'custom_header_link'				=> '',
+		'custom_header_hide'				=> false,
 		'layout' 							=> 'boxed',
 		'sidebar' 							=> 'right-sidebar',
+		'sliding_sidebar'					=> true,
 		'deactivate_google_fonts'			=> false,
-		'header_tagline' 					=> false,
 		'header_search' 					=> false,
 		'header_icons' 						=> false,
 		'header_text' 						=> '',
@@ -47,13 +50,12 @@ function dynamicnews_default_options() {
 		'meta_author'						=> true,
 		'meta_category'						=> true,
 		'meta_tags'							=> true,
+		'post_navigation' 					=> false,
 		'slider_activated_front_page' 		=> false,
 		'slider_activated_blog' 			=> false,
-		'slider_animation' 					=> 'horizontal'
+		'slider_animation' 					=> 'horizontal',
 	);
 	
 	return $default_options;
+	
 }
-
-
-?>

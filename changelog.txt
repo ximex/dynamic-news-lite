@@ -2,6 +2,19 @@
 Dynamic News Lite Changelog
 ===================================
 
+Version 1.3.2
+-----------------------------------
+[added] support for ThemeZee Related Posts plugin
+[added] category and tag descriptions on archive template
+[added] previous/next post navigation on single post view
+
+Version 1.3.1
+-----------------------------------
+[added] custom header image settings
+[added] theme links in theme options panel
+[added] extra setting to disable sliding sidebar feature
+[added] closing toggle for sliding sidebar
+
 Version 1.3
 -----------------------------------
 [added] flat layout theme setting
