@@ -1,6 +1,6 @@
 /*
  * ThemeZee Widget Bundle CSS
- * http://themezee.com/addons/widget-bundle/
+ * https://themezee.com/plugins/widget-bundle/
  *
  * Copyright(C) 2015, ThemeZee.com - support@themezee.com
  * License: GPL v3
@@ -70,6 +70,7 @@
 	padding: 0;
 	color: #777;
 	font-size: 0.8em;
+	background: none;
 }
 
 .tzwb-posts-list  .tzwb-entry-meta span {
