@@ -8,7 +8,8 @@ class Dynamic_News_Category_Posts_Grid_Widget extends WP_Widget {
 		// Setup Widget
 		$widget_ops = array(
 			'classname' => 'dynamicnews_category_posts_grid', 
-			'description' => esc_html__( 'Displays your posts from a selected category in a grid layout. Please use this widget ONLY in the Magazine Homepage widget area.', 'dynamic-news-lite' )
+			'description' => esc_html__( 'Displays your posts from a selected category in a grid layout. Please use this widget ONLY in the Magazine Homepage widget area.', 'dynamic-news-lite' ),
+			'customize_selective_refresh' => true,
 		);
 		parent::__construct('dynamicnews_category_posts_grid', sprintf( esc_html__( 'Category Posts: Grid (%s)', 'dynamic-news-lite' ), 'Dynamic News' ), $widget_ops);
 		
@@ -141,7 +142,7 @@ class Dynamic_News_Category_Posts_Grid_Widget extends WP_Widget {
 
 							<div class="small-post-content">
 								
-								<?php the_title( sprintf( '<h1 class="entry-title post-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h1>' ); ?>
+								<?php the_title( sprintf( '<h2 class="entry-title post-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
 								
 								<?php $this->display_postmeta( $settings ); ?>
 								
@@ -157,7 +158,7 @@ class Dynamic_News_Category_Posts_Grid_Widget extends WP_Widget {
 
 						<a href="<?php the_permalink() ?>" rel="bookmark"><?php the_post_thumbnail('category_posts_wide_thumb'); ?></a>
 
-						<?php the_title( sprintf( '<h1 class="entry-title post-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h1>' ); ?>
+						<?php the_title( sprintf( '<h2 class="entry-title post-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
 
 						<?php $this->display_postmeta( $settings ); ?>
 

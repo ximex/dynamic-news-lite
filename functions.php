@@ -10,29 +10,36 @@ function dynamicnews_enqueue_scripts() {
 	// Get Theme Options from Database
 	$theme_options = dynamicnews_theme_options();
 	
+	// Get Theme Version
+	$theme_version = wp_get_theme()->get( 'Version' );
+	
 	// Register and Enqueue Stylesheet
-	wp_enqueue_style('dynamicnewslite-stylesheet', get_stylesheet_uri());
+	wp_enqueue_style( 'dynamicnewslite-stylesheet', get_stylesheet_uri(), array(), $theme_version );
 	
 	// Register Genericons
-	wp_enqueue_style('dynamicnewslite-genericons', get_template_directory_uri() . '/css/genericons/genericons.css');
+	wp_enqueue_style( 'genericons', get_template_directory_uri() . '/css/genericons/genericons.css', array(), '3.4.1' );
+	
+	// Register and Enqueue HTML5shiv to support HTML5 elements in older IE versions
+	wp_enqueue_script( 'html5shiv', get_template_directory_uri() . '/js/html5shiv.min.js', array(), '3.7.3' );
+	wp_script_add_data( 'html5shiv', 'conditional', 'lt IE 9' );
 
 	// Register and Enqueue FlexSlider JS and CSS if necessary
 	if ( ( isset($theme_options['slider_activated_blog']) and $theme_options['slider_activated_blog'] == true )
 		|| ( isset($theme_options['slider_activated_front_page']) and $theme_options['slider_activated_front_page'] == true ) ) :
 
 		// FlexSlider CSS
-		wp_enqueue_style('dynamicnewslite-flexslider', get_template_directory_uri() . '/css/flexslider.css');
+		wp_enqueue_style( 'dynamicnewslite-flexslider', get_template_directory_uri() . '/css/flexslider.css' );
 
 		// FlexSlider JS
-		wp_enqueue_script('dynamicnewslite-jquery-flexslider', get_template_directory_uri() .'/js/jquery.flexslider-min.js', array('jquery'));
+		wp_enqueue_script( 'flexslider', get_template_directory_uri() .'/js/jquery.flexslider-min.js', array( 'jquery' ), '2.6.0' );
 
 		// Register and enqueue slider.js
-		wp_enqueue_script('dynamicnewslite-jquery-frontpage_slider', get_template_directory_uri() .'/js/slider.js', array('dynamicnewslite-jquery-flexslider'));
+		wp_enqueue_script( 'dynamicnewslite-jquery-frontpage_slider', get_template_directory_uri() .'/js/slider.js', array( 'flexslider' ), '2.6.0' );
 
 	endif;
 
 	// Register and enqueue navigation.js
-	wp_enqueue_script('dynamicnewslite-jquery-navigation', get_template_directory_uri() .'/js/navigation.js', array('jquery'));
+	wp_enqueue_script( 'dynamicnewslite-jquery-navigation', get_template_directory_uri() . '/js/navigation.js', array( 'jquery' ), '20160421' );
 	
 	// Passing Parameters to Navigation.js Javascript
 	wp_localize_script( 'dynamicnewslite-jquery-navigation', 'dynamicnews_menu_title', esc_html__( 'Menu', 'dynamic-news-lite' ) );
@@ -40,7 +47,7 @@ function dynamicnews_enqueue_scripts() {
 	// Register and enqueue sidebar.js
 	if ( true == $theme_options['sliding_sidebar'] ) {
 	
-		wp_enqueue_script( 'dynamicnewslite-jquery-sidebar', get_template_directory_uri() .'/js/sidebar.js', array('jquery') );
+		wp_enqueue_script( 'dynamicnewslite-jquery-sidebar', get_template_directory_uri() .'/js/sidebar.js', array( 'jquery' ), '20160421' );
 		wp_localize_script( 'dynamicnewslite-jquery-sidebar', 'dynamicnews_sidebar_title', esc_html__( 'Sidebar', 'dynamic-news-lite' ) );
 		
 	}
@@ -51,22 +58,8 @@ function dynamicnews_enqueue_scripts() {
 	}
 
 	// Register and Enqueue Font
-	wp_enqueue_style('dynamicnewslite-default-fonts', dynamicnews_fonts_url(), array(), null );
+	wp_enqueue_style( 'dynamicnewslite-default-fonts', dynamicnews_fonts_url(), array(), null );
 
-}
-
-
-// HTML5shiv for old IE
-add_action('wp_head', 'dynamicnews_enqueue_html5shiv');
-
-function dynamicnews_enqueue_html5shiv(){
-    
-	/* Embeds HTML5shiv to support HTML5 elements in older IE versions plus CSS Backgrounds */ ?>
-	<!--[if lt IE 9]>
-	<script src="<?php echo get_template_directory_uri(); ?>/js/html5shiv.min.js" type="text/javascript"></script>
-	<![endif]-->
-	
-<?php
 }
 
 
@@ -123,6 +116,14 @@ function dynamicnews_setup() {
 	// Add Custom Background
 	add_theme_support('custom-background', array('default-color' => 'e5e5e5'));
 
+	// Set up the WordPress core custom logo feature
+	add_theme_support( 'custom-logo', apply_filters( 'dynamicnews_custom_logo_args', array(
+		'height' => 50,
+		'width' => 350,
+		'flex-height' => true,
+		'flex-width' => true,
+	) ) );
+	
 	// Add Custom Header
 	add_theme_support('custom-header', array(
 		'header-text' => false,
@@ -140,6 +141,9 @@ function dynamicnews_setup() {
 	
 	// Register Social Icons Menu
 	register_nav_menu( 'social', esc_html__( 'Social Icons', 'dynamic-news-lite' ) );
+	
+	// Add Theme Support for Selective Refresh in Customizer
+	add_theme_support( 'customize-selective-refresh-widgets' );
 
 }
 
@@ -177,7 +181,7 @@ function dynamicnews_register_sidebars() {
 	register_sidebar( array(
 		'name' => esc_html__( 'Sidebar', 'dynamic-news-lite' ),
 		'id' => 'sidebar',
-		'description' => esc_html__( 'Appears on posts and pages except Magazine Homepage and Fullwidth template.', 'dynamic-news-lite' ),
+		'description' => esc_html__( 'Appears on posts and pages except the full width template.', 'dynamic-news-lite' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s clearfix">',
 		'after_widget' => '</aside>',
 		'before_title' => '<h3 class="widgettitle"><span>',

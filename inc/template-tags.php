@@ -6,19 +6,50 @@
  * in the theme. You can override these template functions within your child theme.
  *
  */
+
+ 
+if ( ! function_exists( 'dynamicnews_site_logo' ) ): 
+/**
+ * Displays the site logo in the header area
+ */
+function dynamicnews_site_logo() {
+
+	if ( function_exists( 'the_custom_logo' ) ) {
+		
+		the_custom_logo();
 	
-
-// Display Site Title
-add_action( 'dynamicnews_site_title', 'dynamicnews_display_site_title' );
-
-function dynamicnews_display_site_title() { ?>
-
-	<a href="<?php echo esc_url(home_url('/')); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home">
-		<h1 class="site-title"><?php bloginfo('name'); ?></h1>
-	</a>
-
-<?php
+	} 
+	
 }
+endif;
+
+
+if ( ! function_exists( 'dynamicnews_site_title' ) ): 
+/**
+ * Displays the site title in the header area
+ */
+function dynamicnews_site_title() {
+	
+	// Get theme options from database
+	$theme_options = dynamicnews_theme_options();	
+	
+	// Return early if site title is deactivated
+	if( false == $theme_options['site_title'] ) {
+		return;
+	}
+	
+	if ( is_home() or is_page_template( 'template-frontpage.php' )  ) : ?>
+		
+		<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+	
+	<?php else : ?>
+		
+		<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
+	
+	<?php endif; 
+	
+}
+endif;
 
 
 // Display Custom Header
@@ -51,12 +82,12 @@ if ( ! function_exists( 'dynamicnews_display_custom_header' ) ):
 				if( $theme_options['custom_header_link'] <> '' ) : ?>
 				
 					<a href="<?php echo esc_url( $theme_options['custom_header_link'] ); ?>">
-						<img src="<?php echo get_header_image(); ?>" />
+						<img src="<?php header_image(); ?>" srcset="<?php echo esc_attr( wp_get_attachment_image_srcset( get_custom_header()->attachment_id ) ); ?>" width="<?php echo esc_attr( get_custom_header()->width ); ?>" height="<?php echo esc_attr( get_custom_header()->height ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
 					</a>
 					
 				<?php else : ?>
 				
-					<img src="<?php echo get_header_image(); ?>" />
+					<img src="<?php header_image(); ?>" srcset="<?php echo esc_attr( wp_get_attachment_image_srcset( get_custom_header()->attachment_id ) ); ?>" width="<?php echo esc_attr( get_custom_header()->width ); ?>" height="<?php echo esc_attr( get_custom_header()->height ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
 					
 				<?php endif; ?>
 			
