@@ -2472,9 +2472,6 @@ embed, iframe, object, video {
 .em-calendar {
 	width: 100%;
 }
-#mainnav-menu a {
-	color: #FFF;
-}
 #mainnav-menu ul a:link, #mainnav-menu ul a:visited{
 	font-size: 1em;
 }
