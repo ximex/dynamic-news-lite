@@ -12,14 +12,10 @@
 
 <body <?php body_class(); ?>>
 
-<?php // Get Theme Options from Database
-	$theme_options = dynamicnews_theme_options();
-?>
-
 <div id="wrapper" class="hfeed">
 
 	<div id="topnavi-wrap">
-		<?php locate_template('/inc/top-navigation.php', true); ?>
+		<?php get_template_part( 'inc/top-navigation' ); ?>
 	</div>
 
 	<div id="header-wrap">
@@ -30,16 +26,12 @@
 
 				<?php dynamicnews_site_logo(); ?>
 				<?php dynamicnews_site_title(); ?>
-
-				<?php // Display Tagline on header if activated
-				if ( isset($theme_options['header_tagline']) and $theme_options['header_tagline'] == true ) : ?>
-					<h2 class="site-description"><?php echo bloginfo('description'); ?></h2>
-				<?php endif; ?>
+				<?php dynamicnews_site_description(); ?>
 
 			</div>
 
 			<div id="header-content" class="clearfix">
-				<?php get_template_part('inc/header-content'); ?>
+				<?php get_template_part( 'inc/header-content' ); ?>
 			</div>
 
 		</header>
@@ -57,7 +49,7 @@
 					'menu_class' => 'main-navigation-menu',
 					'echo' => true,
 					'fallback_cb' => 'dynamicnews_default_menu',
-					'depth' => 0
+					'depth' => 0,
 				) );
 			?>
 		</nav>
